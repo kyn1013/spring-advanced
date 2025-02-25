@@ -52,20 +52,20 @@ class ManagerServiceTest {
     @Test
     void todo의_user가_null인_경우_예외가_발생한다() {
         // given
-        AuthUser authUser = new AuthUser(1L, "a@a.com", UserRole.USER);
-        long todoId = 1L;
-        long managerUserId = 2L;
+        AuthUser authUser = new AuthUser(1L, "a@a.com", UserRole.USER); // 토큰에서 전달하는 사용자 정보
+        long todoId = 1L; // 할일 번호
+        long managerUserId = 2L; // 담당자 id 번호
 
         Todo todo = new Todo();
-        ReflectionTestUtils.setField(todo, "user", null);
+        ReflectionTestUtils.setField(todo, "user", null); // 1번의 todo 객체의 user를 null로 하겠다
 
-        ManagerSaveRequest managerSaveRequest = new ManagerSaveRequest(managerUserId);
+        ManagerSaveRequest managerSaveRequest = new ManagerSaveRequest(managerUserId); // 2번의 담당자
 
-        given(todoRepository.findById(todoId)).willReturn(Optional.of(todo));
+        given(todoRepository.findById(todoId)).willReturn(Optional.of(todo)); // 할일번호 1번을 조회하면 todo객체가 나와라!
 
         // when & then
         InvalidRequestException exception = assertThrows(InvalidRequestException.class, () ->
-            managerService.saveManager(authUser, todoId, managerSaveRequest)
+            managerService.saveManager(authUser, todoId, managerSaveRequest) //  1번의 todo 객체는 user가 널이라서 에러가 터져야 함
         );
 
         assertEquals("담당자를 등록하려고 하는 유저가 일정을 만든 유저가 유효하지 않습니다.", exception.getMessage());
