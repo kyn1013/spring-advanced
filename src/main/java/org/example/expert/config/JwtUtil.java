@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.example.expert.domain.common.errorcode.ErrorCode;
 import org.example.expert.domain.common.exception.ServerException;
 import org.example.expert.domain.user.enums.UserRole;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,7 +55,7 @@ public class JwtUtil {
             // 해당한다면 순수 토큰 값만 리턴
             return tokenValue.substring(7);
         }
-        throw new ServerException("Not Found Token");
+        throw new ServerException(ErrorCode.TOKEN_NOT_FOUND);
     }
 
     // JWT에서 payload를 가져옴
