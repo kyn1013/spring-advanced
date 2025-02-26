@@ -12,6 +12,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+//  컨트롤러 메서드의 파라미터(인자)를 해석하고 주입하는 인터페이스
 public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override

@@ -49,12 +49,15 @@ public class JwtUtil {
     }
 
     public String substringToken(String tokenValue) {
+        // 토큰이 비어있지 않고, "Bearer "로 시작하는지 확인
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
+            // 해당한다면 순수 토큰 값만 리턴
             return tokenValue.substring(7);
         }
         throw new ServerException("Not Found Token");
     }
 
+    // JWT에서 payload를 가져옴
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)

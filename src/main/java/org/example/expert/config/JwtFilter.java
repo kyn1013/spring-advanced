@@ -30,13 +30,16 @@ public class JwtFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        request = new RequestWrapper(httpRequest);
+
         String url = httpRequest.getRequestURI();
 
-        if (url.startsWith("/auth")) {
+        if (url.startsWith("/auth")) { // /auth로 시작하는 경로는 다음 필터로 넘김
             chain.doFilter(request, response);
             return;
         }
 
+        // 아니라면 Authorization헤더에서 토큰 값을 꺼냄
         String bearerJwt = httpRequest.getHeader("Authorization");
 
         if (bearerJwt == null) {
@@ -49,24 +52,30 @@ public class JwtFilter implements Filter {
 
         try {
             // JWT 유효성 검사와 claims 추출
+            // Claims객체 -> JWT에서 payload를 가져옴
             Claims claims = jwtUtil.extractClaims(jwt);
             if (claims == null) {
                 httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 JWT 토큰입니다.");
                 return;
             }
 
+            // 역할 가져오기
             UserRole userRole = UserRole.valueOf(claims.get("userRole", String.class));
 
+            // request 객체에 Claims의 내용을 담음
             httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
             httpRequest.setAttribute("email", claims.get("email"));
             httpRequest.setAttribute("userRole", claims.get("userRole"));
 
+            // 관리자만 요청할 수 있는 경우라면
             if (url.startsWith("/admin")) {
                 // 관리자 권한이 없는 경우 403을 반환합니다.
                 if (!UserRole.ADMIN.equals(userRole)) {
                     httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "관리자 권한이 없습니다.");
                     return;
                 }
+
+                // 관리자라면 다음 필터로
                 chain.doFilter(request, response);
                 return;
             }
