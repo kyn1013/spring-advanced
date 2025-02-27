@@ -46,7 +46,7 @@ class ManagerServiceTest {
 
         // when & then
         InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> managerService.getManagers(todoId));
-        assertEquals("Todo not found", exception.getMessage());
+        assertEquals("해당하는 할일이 없습니다.", exception.getErrorCode().getMessage());
     }
 
     @Test
@@ -68,7 +68,7 @@ class ManagerServiceTest {
             managerService.saveManager(authUser, todoId, managerSaveRequest) //  1번의 todo 객체는 user가 널이라서 에러가 터져야 함
         );
 
-        assertEquals("담당자를 등록하려고 하는 유저가 일정을 만든 유저가 유효하지 않습니다.", exception.getMessage());
+        assertEquals("담당자를 등록하려고 하는 유저가 일정을 만든 유저가 유효하지 않습니다.", exception.getErrorCode().getMessage());
     }
 
     @Test // 테스트코드 샘플
