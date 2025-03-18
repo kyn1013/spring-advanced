@@ -1,6 +1,5 @@
 package org.example.expert.domain.todo.repository;
 
-import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.enums.UserRole;
