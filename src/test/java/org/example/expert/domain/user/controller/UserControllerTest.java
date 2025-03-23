@@ -52,10 +52,10 @@ class UserControllerTest {
                 .thenThrow(new InvalidRequestException(ErrorCode.USER_NOT_FOUND));
 
         // then
-        mockMvc.perform(get("/users", userId))
+        mockMvc.perform(get("/users/{userId}", userId))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name()))
-                .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value())) //숫자
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name())) //문자
                 .andExpect(jsonPath("$.message").value("유저가 존재하지 않습니다."));
     }
 }
