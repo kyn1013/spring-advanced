@@ -29,7 +29,7 @@ class CommentRepositoryTest {
     @Test
     public void 댓글이_정상적으로_저장된다() {
         // given
-        User user = new User("yn1013@naver.com", "password", UserRole.USER);
+        User user = new User("yn1113@naver.com", "password", UserRole.USER);
         Todo todo = new Todo("title", "contents", "sunny", user);
         Comment comment = new Comment("comments", user, todo);
         userRepository.save(user);
