@@ -7,10 +7,8 @@ import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.enums.UserRole;
 import org.example.expert.domain.user.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -44,7 +42,7 @@ class UserServiceTest {
         User user = new User(email, "password", UserRole.USER);
         ReflectionTestUtils.setField(user, "id", userId);
 
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
         // when
         UserResponse userResponse = userService.getUser(userId);
@@ -59,7 +57,7 @@ class UserServiceTest {
     public void 존재하지_않는_User_조회시에_InvalidRequestException을_던진다() {
         // given
         long userId = 1L;
-        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
 
         // when & then
         InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> userService.getUser(userId));
@@ -74,7 +72,7 @@ class UserServiceTest {
         User user = new User(email, "oldPassword", UserRole.USER);
         ReflectionTestUtils.setField(user, "id", userId);
 
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
         String oldPassword = "oldPassword";
         String newPassword = "oldPassword";
@@ -94,7 +92,7 @@ class UserServiceTest {
         long userId = 1L;
         User user = new User(email, "password", UserRole.USER);
         ReflectionTestUtils.setField(user, "id", userId);
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
         String oldPassword = "oldPassword";
         String newPassword = "newPassword";
